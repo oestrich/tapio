@@ -1,0 +1,97 @@
+<div class="mx-auto">
+  <form id="post" action="/posts" method="post">
+    <div class="mb-2">
+      <label class="block text-gray-700 font-bold mb-2" for="post_body">
+        What's on your mind?
+      </label>
+
+      <textarea name="body" id="post_body" class="shadow rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autofocus></textarea>
+    </div>
+
+    <input type="submit" value="Post" class="hidden cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" />
+  </form>
+
+  <h2 class="text-xl my-4">Latest posts</h2>
+
+  <ul role="list" id="posts" class="pb-4 mt-4">
+    <%= Enum.map(@posts, fn post -> %>
+      <li class="my-4 py-4 flex rounded bg-white shadow">
+        <div class="ml-3">
+          <p class=""><%= post.body %></p>
+          <div class="text-sm text-gray-400">
+            <span class="text-green-600"><%= post.user.username %></span>
+            at <%= posted_at(post.inserted_at, post.user.timezone) %>
+          </div>
+        </div>
+      </li>
+    <% end) %>
+  </ul>
+</div>
+
+<script type="application/javascript">
+document.addEventListener("DOMContentLoaded", () => {
+  let newPost = (post) => {
+    let newPost = document.createElement("li");
+    newPost.className = 'my-4 py-4 flex rounded bg-white shadow';
+
+    newPost.innerHTML = `
+    <div class="ml-3">
+      <p class="">${post.body}</p>
+      <div class="text-sm text-gray-400">
+       <span class="text-green-600">${post.username}</span> at ${post.inserted_at}
+      </div>
+    </div>
+    `;
+
+    let list = document.querySelector("#posts");
+    list.prepend(newPost);
+  };
+
+  const eventHandlers = {
+    "posts/new": newPost,
+  };
+
+  let socket = new WebSocket("ws://localhost:3000/socket");
+
+  socket.onmessage = (e) => {
+    let message = JSON.parse(e.data);
+
+    if (eventHandlers[message.event]) {
+      const handler = eventHandlers[message.event];
+
+      handler(message.data);
+    }
+  };
+
+  const createPost = (body) => {
+    fetch("/posts", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ body })
+    }); 
+  };
+
+  let isShiftPressed = false;
+
+  document.querySelector("#post_body").addEventListener("keyup", (e) => {
+    if (e.key == "Shift") {
+      isShiftPressed = false;
+    }
+  });
+
+  document.querySelector("#post_body").addEventListener("keydown", (e) => {
+    if (e.key == "Shift") {
+      isShiftPressed = true;
+    }
+
+    if (e.key == "Enter" && !isShiftPressed) {
+      e.preventDefault();
+      createPost(e.target.value);
+      e.target.value = "";
+    }
+  });
+});
+</script>

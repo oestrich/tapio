@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tapio</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://unpkg.com/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet" />
+    <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/phoenix_html@3.0.4/priv/static/phoenix_html.min.js"></script>
+  </head>
+
+  <body class="bg-gray-600 font-sans leading-normal tracking-normal">
+    <nav class="bg-gray-800 p-2 mt-0 w-full absolute">
+      <div class="max-w-4xl mx-auto flex flex-wrap items-center">
+        <div class="flex w-full md:w-1/2 justify-center md:justify-start text-white font-extrabold">
+          <a href="/" class="text-white no-underline hover:text-white hover:no-underline">
+            <span class="text-2xl pl-2">Tapio</span>
+          </a>
+        </div>
+
+        <div class="flex w-full content-center justify-between md:w-1/2 md:justify-end">
+          <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
+            <%= if Map.has_key?(assigns, :current_user) do %>
+              <li class="mr-3">
+                <a href="/sign-out" class="inline-block text-white no-underline py-2 px-2 hover:text-gray-200" data-method="delete" data-to="/sign-out">
+                  Sign Out
+                </a>
+              </li>
+            <% else %>
+              <li class="mr-3">
+                <a href="/sign-in" class="inline-block text-white no-underline py-2 px-2 hover:text-gray-200">
+                  Sign In
+                </a>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mx-auto max-w-4xl">
+      <div class="bg-gray-100 min-h-screen">
+        <div class="pt-20 px-16">
+          <%= @inner_content %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
