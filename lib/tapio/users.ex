@@ -3,6 +3,7 @@ defmodule Tapio.Users.User do
 
   import Ecto.Changeset
 
+  alias Tapio.Posts.Like
   alias Tapio.Posts.Post
 
   schema "users" do
@@ -14,6 +15,7 @@ defmodule Tapio.Users.User do
     field(:password_confirmation, :string, virtual: true)
     field(:password_hash, :string)
 
+    has_many(:likes, Like)
     has_many(:posts, Post)
 
     timestamps()
@@ -60,6 +62,11 @@ defmodule Tapio.Users do
   end
 
   def validate_login(username, password) do
+    username =
+      username
+      |> String.trim()
+      |> String.downcase()
+
     case Repo.get_by(User, username: username) do
       nil ->
         Bcrypt.no_user_verify()

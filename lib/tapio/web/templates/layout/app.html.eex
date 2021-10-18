@@ -21,13 +21,13 @@
         <div class="flex w-full content-center justify-between md:w-1/2 md:justify-end">
           <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
             <%= if Map.has_key?(assigns, :current_user) do %>
-              <li class="mr-3">
+              <li>
                 <a href="/sign-out" class="inline-block text-white no-underline py-2 px-2 hover:text-gray-200" data-method="delete" data-to="/sign-out">
                   Sign Out
                 </a>
               </li>
             <% else %>
-              <li class="mr-3">
+              <li>
                 <a href="/sign-in" class="inline-block text-white no-underline py-2 px-2 hover:text-gray-200">
                   Sign In
                 </a>
@@ -40,7 +40,7 @@
 
     <div class="container mx-auto max-w-4xl">
       <div class="bg-gray-100 min-h-screen">
-        <div class="pt-20 px-16">
+        <div class="pt-28 px-4 md:pt-20 md:px-16">
           <%= @inner_content %>
         </div>
       </div>

@@ -9,7 +9,7 @@ defmodule Tapio.Web.Posts do
         case Token.request_header(token, "accept") do
           ["application/json"] ->
             token
-            |> Token.response_status(200)
+            |> Token.response_status(201)
             |> Token.response_header("Content-Type", "application/json")
             |> Token.response_body(Jason.encode!(View.render("post.json", %{post: post})))
 

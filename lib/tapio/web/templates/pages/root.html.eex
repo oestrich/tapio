@@ -1,4 +1,8 @@
-<div class="mx-auto">
+<div class="mx-auto relative">
+  <div class="alert-error hidden absolute w-full bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+    Problemo
+  </div>
+
   <form id="post" action="/posts" method="post">
     <div class="mb-2">
       <label class="block text-gray-700 font-bold mb-2" for="post_body">
@@ -16,11 +20,18 @@
   <ul role="list" id="posts" class="pb-4 mt-4">
     <%= Enum.map(@posts, fn post -> %>
       <li class="my-4 py-4 flex rounded bg-white shadow">
-        <div class="ml-3">
+        <div class="mx-3 w-full" data-post-id="<%= post.id %>">
           <p class=""><%= post.body %></p>
-          <div class="text-sm text-gray-400">
-            <span class="text-green-600"><%= post.user.username %></span>
-            at <%= posted_at(post.inserted_at, post.user.timezone) %>
+
+          <div class="flex flex-row justify-between w-full">
+            <div class="text-sm text-gray-400">
+              <span class="text-green-600"><%= post.user.username %></span>
+              at <%= posted_at(post.inserted_at, post.user.timezone) %>
+            </div>
+            <div>
+              <span class="like-count"><%= post.likes_count %></span>
+              <a href="/posts/<%= post.id %>/like" class="like text-sm">Like</a>
+            </div>
           </div>
         </div>
       </li>
@@ -35,10 +46,17 @@ document.addEventListener("DOMContentLoaded", () => {
     newPost.className = 'my-4 py-4 flex rounded bg-white shadow';
 
     newPost.innerHTML = `
-    <div class="ml-3">
+    <div class="mx-3 w-full" data-post-id="${post.id}">
       <p class="">${post.body}</p>
-      <div class="text-sm text-gray-400">
-       <span class="text-green-600">${post.username}</span> at ${post.inserted_at}
+
+      <div class="flex flex-row justify-between w-full">
+        <div class="text-sm text-gray-400">
+          <span class="text-green-600">${post.username}</span> at ${post.inserted_at}
+        </div>
+        <div>
+          <span class="like-count">0</span>
+          <a href="/posts/${post.id}/like" class="like text-sm">Like</a>
+        </div>
       </div>
     </div>
     `;
@@ -47,8 +65,16 @@ document.addEventListener("DOMContentLoaded", () => {
     list.prepend(newPost);
   };
 
+  let newLike = (like) => {
+    let post = document.querySelector(`[data-post-id="${like.post_id}"]`);
+    let likeCountElement = post.querySelector(".like-count");
+    let likeCount = Number(likeCountElement.innerHTML) + 1;
+    likeCountElement.innerHTML = likeCount;
+  };
+
   const eventHandlers = {
     "posts/new": newPost,
+    "likes/new": newLike,
   };
 
   let socket = new WebSocket("ws://localhost:3000/socket");
@@ -71,7 +97,28 @@ document.addEventListener("DOMContentLoaded", () => {
         'Accept': 'application/json',
       },
       body: JSON.stringify({ body })
-    }); 
+    });
+  };
+
+  const createLike = (href) => {
+    fetch(href, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: "{}",
+    }).then((response) => {
+      if (!response.ok) {
+        let alert = document.querySelector(".alert-error");
+        alert.innerHTML = "You've already liked this!";
+        alert.classList.remove("hidden");
+
+        setTimeout(() => {
+          alert.classList.add("hidden");
+        }, 4000);
+      }
+    });
   };
 
   let isShiftPressed = false;
@@ -91,6 +138,14 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       createPost(e.target.value);
       e.target.value = "";
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    let target = e.target;
+    if (target.classList.contains("like")) {
+      e.preventDefault();
+      createLike(target.href);
     }
   });
 });
