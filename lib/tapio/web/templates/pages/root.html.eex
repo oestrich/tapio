@@ -3,7 +3,7 @@
     Problemo
   </div>
 
-  <form id="post" action="/posts" method="post">
+  <form id="post" action="<%= Routes.posts_path(token) %>" method="post">
     <div class="mb-2">
       <label class="block text-gray-700 font-bold mb-2" for="post_body">
         What's on your mind?
@@ -30,7 +30,7 @@
             </div>
             <div>
               <span class="like-count"><%= post.likes_count %></span>
-              <a href="/posts/<%= post.id %>/like" class="like text-sm">Like</a>
+              <a href="<%= Routes.post_like_path(token, id: post.id) %>" class="like text-sm">Like</a>
             </div>
           </div>
         </div>
@@ -77,10 +77,10 @@ document.addEventListener("DOMContentLoaded", () => {
     "likes/new": newLike,
   };
 
-  let socket = new WebSocket("ws://localhost:3000/socket");
+  let socket = new WebSocket("ws://<%= @host %>:<%= @port %>/socket");
 
   socket.onmessage = (e) => {
-    let message = JSON.parse(e.data);
+    const message = JSON.parse(e.data);
 
     if (eventHandlers[message.event]) {
       const handler = eventHandlers[message.event];

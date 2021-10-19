@@ -28,7 +28,8 @@ defmodule Tapio.MixProject do
       {:ecto_sql, "~> 3.7"},
       {:phoenix_pubsub, "~> 2.0"},
       {:postgrex, "~> 0.15.11"},
-      {:timex, "~> 3.7"}
+      {:timex, "~> 3.7"},
+      {:vapor, "~> 0.10.0"}
     ]
   end
 

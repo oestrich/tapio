@@ -3,12 +3,16 @@ defmodule Tapio.Application do
 
   use Application
 
+  alias Tapio.Config
+
   @impl true
   def start(_type, _args) do
+    config = Config.application()
+
     children = [
       {Tapio.Repo, []},
       {Phoenix.PubSub, name: Tapio.PubSub},
-      {Aino, callback: Tapio.Web.Handler, port: 3000}
+      {Aino, callback: Tapio.Web.Handler, port: config.port, host: config.host}
     ]
 
     opts = [strategy: :one_for_one, name: Tapio.Supervisor]

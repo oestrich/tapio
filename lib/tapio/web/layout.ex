@@ -1,5 +1,6 @@
 defmodule Tapio.Web.Layout do
   alias Aino.Token
+  alias Tapio.Web.Handler.Routes
 
   require Aino.View
 
@@ -13,7 +14,7 @@ defmodule Tapio.Web.Layout do
         assigns = Map.take(token, [:current_user])
         assigns = Map.put(assigns, :inner_content, token.response_body)
 
-        Token.response_body(token, render("app.html", assigns))
+        render(token, "app.html", assigns)
 
       _ ->
         token

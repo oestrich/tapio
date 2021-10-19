@@ -1,28 +1,28 @@
 defmodule Tapio.Web.Handler do
   @moduledoc false
 
-  import Aino.Middleware.Routes, only: [delete: 2, get: 2, post: 2]
+  import Aino.Middleware.Routes, only: [routes: 1, delete: 3, get: 3, post: 2, post: 3]
 
   @behaviour Aino.Handler
 
+  routes([
+    get("/", &Tapio.Web.Page.root/1, as: :root),
+    get("/sign-in", &Tapio.Web.Session.show/1, as: :sign_in),
+    post("/sign-in", &Tapio.Web.Session.create/1),
+    delete("/sign-out", &Tapio.Web.Session.delete/1, as: :sign_out),
+    post("/posts", &Tapio.Web.Posts.create/1, as: :posts),
+    post("/posts/:id/like", &Tapio.Web.Likes.create/1, as: :post_like)
+  ])
+
   @impl true
   def handle(token) do
-    routes = [
-      get("/", &Tapio.Web.Page.root/1),
-      get("/sign-in", &Tapio.Web.Session.show/1),
-      post("/sign-in", &Tapio.Web.Session.create/1),
-      delete("/sign-out", &Tapio.Web.Session.delete/1),
-      post("/posts", &Tapio.Web.Posts.create/1),
-      post("/posts/:id/like", &Tapio.Web.Likes.create/1)
-    ]
-
     middleware = [
       &Aino.Middleware.Development.recompile/1,
       Aino.Middleware.common(),
       &Aino.Session.config(&1, %Aino.Session.Cookie{key: "key", salt: "salt"}),
       &Aino.Session.decode/1,
       &Tapio.Web.Session.Fetch.call/1,
-      &Aino.Middleware.Routes.routes(&1, routes),
+      &Aino.Middleware.Routes.routes(&1, routes()),
       &Aino.Middleware.Routes.match_route/1,
       &Aino.Middleware.params/1,
       &Aino.Middleware.Routes.handle_route/1,

@@ -11,19 +11,21 @@ defmodule Tapio.Web.Page do
         token
         |> Token.response_status(200)
         |> Token.response_header("Content-Type", "text/html")
-        |> Token.response_body(View.render("root.html", %{posts: posts}))
+        |> View.render("root.html", %{posts: posts})
 
       false ->
         token
         |> Token.response_status(200)
         |> Token.response_header("Content-Type", "text/html")
-        |> Token.response_body(View.render("marketing.html"))
+        |> View.render("marketing.html")
     end
   end
 end
 
 defmodule Tapio.Web.Page.View do
   require Aino.View
+
+  alias Tapio.Web.Handler.Routes
 
   Aino.View.compile [
     "lib/tapio/web/templates/pages/marketing.html.eex",

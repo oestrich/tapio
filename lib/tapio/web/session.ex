@@ -8,7 +8,7 @@ defmodule Tapio.Web.Session do
     token
     |> Token.response_status(200)
     |> Token.response_header("Content-Type", "text/html")
-    |> Token.response_body(View.render("sign_in.html"))
+    |> View.render("sign_in.html")
   end
 
   def create(%{params: %{"password" => password, "username" => username}} = token) do
@@ -25,7 +25,7 @@ defmodule Tapio.Web.Session do
         token
         |> Token.response_status(422)
         |> Token.response_header("Content-Type", "text/html")
-        |> Token.response_body(View.render("sign_in.html"))
+        |> View.render("sign_in.html")
     end
   end
 
@@ -41,6 +41,8 @@ end
 
 defmodule Tapio.Web.Session.View do
   require Aino.View
+
+  alias Tapio.Web.Handler.Routes
 
   Aino.View.compile [
     "lib/tapio/web/templates/session/sign_in.html.eex"
