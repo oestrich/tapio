@@ -19,7 +19,7 @@ defmodule Tapio.Web.Handler do
     middleware = [
       &Aino.Middleware.Development.recompile/1,
       Aino.Middleware.common(),
-      &Aino.Middleware.static/1,
+      &Aino.Middleware.assets/1,
       &Aino.Session.config(&1, %Aino.Session.Cookie{key: "key", salt: "salt"}),
       &Aino.Session.decode/1,
       &Tapio.Web.Session.Fetch.call/1,

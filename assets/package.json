@@ -3,7 +3,8 @@
   "license": "MIT",
   "scripts": {
     "build:js": "node build.js",
-    "build:js:watch": "WATCH=true node build.js"
+    "build:js:watch": "WATCH=true node build.js",
+    "deploy:js": "node build.js"
   },
   "devDependencies": {
     "esbuild": "^0.12.6",
