@@ -4,10 +4,17 @@
   "scripts": {
     "build:js": "node build.js",
     "build:js:watch": "WATCH=true node build.js",
+    "build:css": "postcss ./css/app.scss --output ../priv/static/css/app.css",
+    "build:css:watch": "WATCH=true postcss ./css/app.scss --verbose --output ../priv/static/css/app.css --watch",
     "deploy:js": "node build.js"
   },
   "devDependencies": {
+    "autoprefixer": "^10.3.7",
     "esbuild": "^0.12.6",
+    "postcss": "^8.3.11",
+    "postcss-cli": "^9.0.1",
+    "postcss-scss": "^4.0.1",
+    "tailwindcss": "^2.2.17",
     "yarn": "^1.22.10"
   }
 }
