@@ -17,9 +17,9 @@ defmodule Tapio.Web.Handler do
   @impl true
   def handle(token) do
     middleware = [
-      &Aino.Middleware.Development.recompile/1,
       Aino.Middleware.common(),
       &Aino.Middleware.assets/1,
+      &Aino.Middleware.Development.recompile/1,
       &Aino.Session.config(&1, %Aino.Session.Cookie{key: "key", salt: "salt"}),
       &Aino.Session.decode/1,
       &Tapio.Web.Session.Fetch.call/1,
