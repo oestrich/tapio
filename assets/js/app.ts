@@ -1,5 +1,9 @@
+import { Post }  from "./post";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+
 document.addEventListener("click", (e) => {
-  let target = e.target;
+  let target = e.target as HTMLAnchorElement;
 
   if ("method" in target.dataset) {
     e.preventDefault();
@@ -20,36 +24,28 @@ document.addEventListener("click", (e) => {
   }
 });
 
+interface Like {
+  post_id: number;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  let newPost = (post) => {
+  let newPost = (post: Post) => {
     let newPost = document.createElement("li");
+
     newPost.className = 'my-4 py-4 flex rounded bg-white shadow';
 
-    newPost.innerHTML = `
-    <div class="mx-3 w-full" data-post-id="${post.id}">
-      <p class="">${post.body}</p>
-
-      <div class="flex flex-row justify-between w-full">
-        <div class="text-sm text-gray-400">
-          <span class="text-green-600">${post.username}</span> at ${post.inserted_at}
-        </div>
-        <div>
-          <span class="like-count">0</span>
-          <a href="/posts/${post.id}/like" class="like text-sm">Like</a>
-        </div>
-      </div>
-    </div>
-    `;
+    const reactElement = React.createElement(Post, post);
+    ReactDOM.render(reactElement, newPost);
 
     let list = document.querySelector("#posts");
     list.prepend(newPost);
   };
 
-  let newLike = (like) => {
+  let newLike = (like: Like) => {
     let post = document.querySelector(`[data-post-id="${like.post_id}"]`);
     let likeCountElement = post.querySelector(".like-count");
     let likeCount = Number(likeCountElement.innerHTML) + 1;
-    likeCountElement.innerHTML = likeCount;
+    likeCountElement.innerHTML = likeCount.toString();
   };
 
   const eventHandlers = {
@@ -70,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const createPost = (body) => {
+  const createPost = (body: string) => {
     fetch("/posts", {
       method: "POST",
       headers: {
@@ -81,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  const createLike = (href) => {
+  const createLike = (href: string) => {
     fetch(href, {
       method: "POST",
       headers: {
@@ -107,27 +103,30 @@ document.addEventListener("DOMContentLoaded", () => {
   let postBody = document.querySelector("#post_body");
 
   if (postBody) {
-    postBody.addEventListener("keyup", (e) => {
+    postBody.addEventListener("keyup", (e: KeyboardEvent) => {
       if (e.key == "Shift") {
         isShiftPressed = false;
       }
     });
 
-    postBody.addEventListener("keydown", (e) => {
+    postBody.addEventListener("keydown", (e: KeyboardEvent) => {
       if (e.key == "Shift") {
         isShiftPressed = true;
       }
 
       if (e.key == "Enter" && !isShiftPressed) {
         e.preventDefault();
-        createPost(e.target.value);
-        e.target.value = "";
+        let target = e.target as HTMLInputElement;
+
+        createPost(target.value);
+        target.value = "";
       }
     });
   }
 
   document.addEventListener("click", (e) => {
-    let target = e.target;
+    let target = e.target as HTMLAnchorElement;
+
     if (target.classList.contains("like")) {
       e.preventDefault();
       createLike(target.href);

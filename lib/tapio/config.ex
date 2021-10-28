@@ -11,6 +11,7 @@ defmodule Tapio.Config do
       %Dotenv{},
       %Env{
         bindings: [
+          {:environment, "DEPLOY_ENV"},
           {:port, "PORT", map: &String.to_integer/1},
           {:host, "HOST"}
         ]

@@ -30,7 +30,7 @@
             </div>
             <div>
               <span class="like-count"><%= post.likes_count %></span>
-              <a href="<%= Routes.post_like_path(token, id: post.id) %>" class="like text-sm">Like</a>
+              <a href="<%= Routes.post_like_path(token, id: post.id) %>" class="like pl-3 text-sm">Like</a>
             </div>
           </div>
         </div>

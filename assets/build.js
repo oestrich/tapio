@@ -10,7 +10,7 @@ if (process.env.WATCH == "true") {
 }
 
 require('esbuild').build({
-  entryPoints: ['js/app.js'],
+  entryPoints: ['js/app.ts'],
   bundle: true,
   outdir: '../priv/static/js',
   watch

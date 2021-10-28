@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "lib": ["DOM", "ES2021"],
+    "emitDeclarationOnly": true,
+    "declaration": true
+  }
+}

@@ -29,7 +29,7 @@ defmodule Tapio.Web.Handler do
       &Aino.Middleware.Routes.handle_route/1,
       &Tapio.Web.Layout.wrap/1,
       &Aino.Session.encode/1,
-      &Tapio.Web.Logging.call/1
+      &Aino.Middleware.logging/1
     ]
 
     Aino.Token.reduce(token, middleware)
@@ -38,25 +38,6 @@ defmodule Tapio.Web.Handler do
   @impl true
   def sockets() do
     [{"/socket", Tapio.Web.Socket}]
-  end
-end
-
-defmodule Tapio.Web.Logging do
-  require Logger
-
-  def call(token) do
-    method = String.upcase(to_string(token.method))
-    path = "/" <> Enum.join(token.path, "/")
-
-    case Map.keys(token.params) == [] do
-      true ->
-        Logger.info("#{method} #{path}")
-
-      false ->
-        Logger.info("#{method} #{path}\nParameters: #{inspect(token.params)}")
-    end
-
-    token
   end
 end
 
@@ -93,7 +74,31 @@ defmodule Tapio.Web.Socket do
   end
 
   @impl true
-  def info(token, %Tapio.Event{event: "posts/new", data: post}) do
+  def info(token, %Tapio.Event{event: event, data: data}) do
+    case event do
+      "likes/new" ->
+        new_like(token, data)
+
+      "posts/new" ->
+        new_post(token, data)
+    end
+  end
+
+  def info(token, _event) do
+    token
+  end
+
+  defp new_like(token, like) do
+    response =
+      %Aino.WebSocket.Event{
+        event: "likes/new",
+        data: Map.take(like, [:post_id])
+      }
+
+    Map.put(token, :response, response)
+  end
+
+  defp new_post(token, post) do
     %{current_user: user} = token.session
 
     response =
@@ -108,19 +113,5 @@ defmodule Tapio.Web.Socket do
       }
 
     Map.put(token, :response, response)
-  end
-
-  def info(token, %Tapio.Event{event: "likes/new", data: like}) do
-    response =
-      %Aino.WebSocket.Event{
-        event: "likes/new",
-        data: Map.take(like, [:post_id])
-      }
-
-    Map.put(token, :response, response)
-  end
-
-  def info(token, _event) do
-    token
   end
 end
