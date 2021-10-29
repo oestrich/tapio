@@ -8,7 +8,7 @@ defmodule Tapio.Posts.Post do
 
   schema "posts" do
     field(:body, :string)
-    field(:likes_count, :integer, virtual: true)
+    field(:likes_count, :integer, virtual: true, default: 0)
 
     belongs_to(:user, User)
 

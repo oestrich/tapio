@@ -10,7 +10,7 @@
     <script type="application/javascript" src="/assets/js/app.js"></script>
   </head>
 
-  <body class="bg-gray-600 font-sans leading-normal tracking-normal" data-ws-url="ws://<%= @host %>:<%= @port %>/socket">
+  <body class="bg-gray-600 font-sans leading-normal tracking-normal">
     <nav class="bg-gray-800 p-2 mt-0 w-full absolute">
       <div class="max-w-4xl mx-auto flex flex-wrap items-center">
         <div class="flex w-full md:w-1/2 justify-center md:justify-start text-white font-extrabold">

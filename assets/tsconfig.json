@@ -3,6 +3,7 @@
     "jsx": "react",
     "lib": ["DOM", "ES2021"],
     "emitDeclarationOnly": true,
-    "declaration": true
+    "declaration": true,
+    "declarationDir": "./types"
   }
 }

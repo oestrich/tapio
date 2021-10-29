@@ -3,38 +3,5 @@
     Problemo
   </div>
 
-  <form id="post" action="<%= Routes.posts_path(token) %>" method="post">
-    <div class="mb-2">
-      <label class="block text-gray-700 font-bold mb-2" for="post_body">
-        What's on your mind?
-      </label>
-
-      <textarea name="body" id="post_body" class="shadow rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autofocus></textarea>
-    </div>
-
-    <input type="submit" value="Post" class="hidden cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" />
-  </form>
-
-  <h2 class="text-xl my-4">Latest posts</h2>
-
-  <ul role="list" id="posts" class="pb-4 mt-4">
-    <%= Enum.map(@posts, fn post -> %>
-      <li class="my-4 py-4 flex rounded bg-white shadow">
-        <div class="mx-3 w-full" data-post-id="<%= post.id %>">
-          <p class=""><%= post.body %></p>
-
-          <div class="flex flex-row justify-between w-full">
-            <div class="text-sm text-gray-400">
-              <span class="text-green-600"><%= post.user.username %></span>
-              at <%= posted_at(post.inserted_at, post.user.timezone) %>
-            </div>
-            <div>
-              <span class="like-count"><%= post.likes_count %></span>
-              <a href="<%= Routes.post_like_path(token, id: post.id) %>" class="like pl-3 text-sm">Like</a>
-            </div>
-          </div>
-        </div>
-      </li>
-    <% end) %>
-  </ul>
+  <div data-react-class='App' data-react-props='{"webSocketURL":"ws://<%= @host %>:<%= @port %>/socket"}'></>
 </div>
