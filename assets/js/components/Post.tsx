@@ -22,7 +22,9 @@ export function Post(post: ApiPost) {
           <span className="text-green-600">{post.username}</span> at {post.inserted_at}
         </div>
         <div>
-          <span className="like-count">{post.likes_count}</span>{" "}
+          <span className="like-count" title="Number of likes">
+            {post.likes_count}
+          </span>{" "}
           <a href="#" onClick={onLikeClick} className="like pl-3 text-sm">
             Like
           </a>
