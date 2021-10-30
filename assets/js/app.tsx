@@ -1,9 +1,8 @@
 import * as React from "react";
-import { useCallback, useEffect, useState } from "react";
 import * as ReactDOM from "react-dom";
 
-import { fetchPosts, CreatePost, Post, Posts, PostsContext }  from "./posts";
-import { useWebsocket, SocketContext } from "./websocket";
+import { CreatePost, Posts }  from "./posts";
+import { SocketReducer } from "./reducer";
 
 document.addEventListener("click", (e) => {
   let target = e.target as HTMLAnchorElement;
@@ -27,48 +26,16 @@ document.addEventListener("click", (e) => {
   }
 });
 
-interface Like {
-  post_id: number;
-}
-
 interface App {
   webSocketURL: string;
 }
 
-function App({ webSocketURL }: App) {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    fetchPosts().then((posts) => {
-      setPosts(posts);
-    });
-  }, []);
-
-  let newPost = useCallback((post: Post) => {
-    setPosts([post, ...posts]);
-  }, [posts]);
-
-  let newLike = useCallback((like: Like) => {
-    setPosts(posts.map((post) => {
-      if (post.id == like.post_id) {
-        post.likes_count += 1;
-      }
-      return post;
-    }));
-  }, [posts]);
-
-  let socket = useWebsocket(webSocketURL, {
-    "posts/new": newPost,
-    "likes/new": newLike,
-  });
-
+function App(props: App) {
   return (
-    <SocketContext.Provider value={socket}>
-      <PostsContext.Provider value={posts}>
-        <CreatePost />
-        <Posts />
-      </PostsContext.Provider>
-    </SocketContext.Provider>
+    <SocketReducer webSocketURL={props.webSocketURL}>
+      <CreatePost />
+      <Posts />
+    </SocketReducer>
   );
 }
 

@@ -19,7 +19,6 @@ const fetchPosts = async (): Promise<Post[]> => {
   }).then((response) => {
     return response.json();
   }).then((collection) => {
-    console.log(collection);
     return collection["items"];
   });
 
