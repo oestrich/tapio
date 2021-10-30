@@ -25,12 +25,10 @@ end
 defmodule Tapio.Web.Page.View do
   require Aino.View
 
-  alias Tapio.Web.Handler.Routes
-
-  Aino.View.compile [
+  Aino.View.compile([
     "lib/tapio/web/templates/pages/marketing.html.eex",
     "lib/tapio/web/templates/pages/root.html.eex"
-  ]
+  ])
 
   def posted_at(timestamp, timezone) do
     timestamp

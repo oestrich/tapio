@@ -4,9 +4,9 @@ defmodule Tapio.Web.Layout do
 
   require Aino.View
 
-  Aino.View.compile [
+  Aino.View.compile([
     "lib/tapio/web/templates/layout/app.html.eex"
-  ]
+  ])
 
   def wrap(token) do
     case Token.response_header(token, "content-type") do

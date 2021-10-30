@@ -90,11 +90,10 @@ defmodule Tapio.Web.Socket do
   end
 
   defp new_like(token, like) do
-    response =
-      %Aino.WebSocket.Event{
-        event: "likes/new",
-        data: Map.take(like, [:post_id])
-      }
+    response = %Aino.WebSocket.Event{
+      event: "likes/new",
+      data: Map.take(like, [:post_id])
+    }
 
     Map.put(token, :response, response)
   end
@@ -102,17 +101,16 @@ defmodule Tapio.Web.Socket do
   defp new_post(token, post) do
     %{current_user: user} = token.session
 
-    response =
-      %Aino.WebSocket.Event{
-        event: "posts/new",
-        data: %{
-          id: post.id,
-          body: post.body,
-          username: post.user.username,
-          likes_count: post.likes_count,
-          inserted_at: Tapio.Web.Page.View.posted_at(post.inserted_at, user.timezone)
-        }
+    response = %Aino.WebSocket.Event{
+      event: "posts/new",
+      data: %{
+        id: post.id,
+        body: post.body,
+        username: post.user.username,
+        likes_count: post.likes_count,
+        inserted_at: Tapio.Web.Page.View.posted_at(post.inserted_at, user.timezone)
       }
+    }
 
     Map.put(token, :response, response)
   end

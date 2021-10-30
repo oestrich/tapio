@@ -9,7 +9,9 @@ defmodule Tapio.Web.Posts do
     token
     |> Token.response_status(200)
     |> Token.response_header("Content-Type", "application/json")
-    |> Token.response_body(Jason.encode!(View.render("posts.json", %{posts: posts, user: current_user})))
+    |> Token.response_body(
+      Jason.encode!(View.render("posts.json", %{posts: posts, user: current_user}))
+    )
   end
 
   def create(%{current_user: current_user, params: params} = token) do
@@ -20,7 +22,9 @@ defmodule Tapio.Web.Posts do
             token
             |> Token.response_status(201)
             |> Token.response_header("Content-Type", "application/json")
-            |> Token.response_body(Jason.encode!(View.render("post.json", %{post: post, user: current_user})))
+            |> Token.response_body(
+              Jason.encode!(View.render("post.json", %{post: post, user: current_user}))
+            )
 
           _ ->
             token

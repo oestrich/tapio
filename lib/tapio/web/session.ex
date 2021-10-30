@@ -44,9 +44,9 @@ defmodule Tapio.Web.Session.View do
 
   alias Tapio.Web.Handler.Routes
 
-  Aino.View.compile [
+  Aino.View.compile([
     "lib/tapio/web/templates/session/sign_in.html.eex"
-  ]
+  ])
 end
 
 defmodule Tapio.Web.Session.Fetch do

@@ -1,0 +1,82 @@
+name: Main
+on: push
+jobs:
+  elixir:
+    runs-on: ubuntu-20.04
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: tapio_test
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-elixir@v1.5.0
+      with:
+        experimental-otp: true
+        otp-version: "23.1.2"
+        elixir-version: "1.12.2"
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git build-essential
+    - name: Cache build
+      uses: actions/cache@v2
+      with:
+        path: |
+          deps
+          _build
+        key: ${{ runner.os }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+        restore-keys: |
+          ${{ runner.os }}-mix-
+    - name: Setup elixir
+      run: |
+        mix deps.get
+        mix compile
+      env:
+        MIX_ENV: test
+    - name: Verify application
+      run: |
+        mix format --check-formatted
+        mix compile --force --warnings-as-errors
+        mix test
+      env:
+        MIX_ENV: test
+
+  javascript:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+        working-directory: assets
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '16.x'
+    - uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-v1-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node-v1-
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git build-essential
+    - name: Setup node
+      run: |
+        npm install -g yarn
+        yarn install
+    - name: Verify application
+      run: |
+        yarn lint:ci
+        yarn jest
