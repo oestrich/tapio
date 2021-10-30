@@ -1,5 +1,5 @@
 import * as React from "react";
-export interface SocketReducer {
+export interface SocketReducerProps {
     webSocketURL: string;
 }
-export declare function SocketReducer({ webSocketURL, children }: React.PropsWithChildren<SocketReducer>): JSX.Element;
+export declare function SocketReducer({ webSocketURL, children }: React.PropsWithChildren<SocketReducerProps>): JSX.Element;

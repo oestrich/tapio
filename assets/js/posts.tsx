@@ -1,70 +1,19 @@
 import * as React from "react";
 import { useCallback, useContext, useState } from "react";
 
+import { createLike, createPost, Post as ApiPost } from "./api";
+
 const PostsContext = React.createContext([]);
 
-export interface Post {
-  id: number;
-  body: string;
-  username: string;
-  inserted_at: string;
-  likes_count: number;
-}
+export function Post(post: ApiPost) {
+  const onLikeClick = useCallback(
+    (e) => {
+      e.preventDefault();
 
-const fetchPosts = async (): Promise<Post[]> => {
-  let posts = await fetch("/posts", {
-    headers: {
-      'Content-Type': 'application/json',
+      createLike(post);
     },
-  }).then((response) => {
-    return response.json();
-  }).then((collection) => {
-    return collection["items"];
-  });
-
-  return posts;
-};
-
-const createPost = (body: string) => {
-  fetch("/posts", {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-    body: JSON.stringify({ body })
-  });
-};
-
-const createLike = (post: Post) => {
-  const href = `/posts/${post.id}/like`;
-
-  fetch(href, {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-    body: "{}",
-  }).then((response) => {
-    if (!response.ok) {
-      let alert = document.querySelector(".alert-error");
-      alert.innerHTML = "You've already liked this!";
-      alert.classList.remove("hidden");
-
-      setTimeout(() => {
-        alert.classList.add("hidden");
-      }, 4000);
-    }
-  });
-};
-
-export function Post(post: Post) {
-  const onLikeClick = useCallback((e) => {
-    e.preventDefault();
-
-    createLike(post);
-  }, [post]);
+    [post],
+  );
 
   return (
     <div className="mx-3 w-full" data-post-id={`${post.id}`}>
@@ -75,7 +24,10 @@ export function Post(post: Post) {
           <span className="text-green-600">{post.username}</span> at {post.inserted_at}
         </div>
         <div>
-          <span className="like-count">{post.likes_count}</span> <a href="#" onClick={onLikeClick} className="like pl-3 text-sm">Like</a>
+          <span className="like-count">{post.likes_count}</span>{" "}
+          <a href="#" onClick={onLikeClick} className="like pl-3 text-sm">
+            Like
+          </a>
         </div>
       </div>
     </div>
@@ -115,10 +67,23 @@ export function CreatePost() {
           What's on your mind?
         </label>
 
-        <textarea name="body" id="post_body" className="shadow rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autoFocus={true} onKeyUp={onKeyUp} onKeyDown={onKeyDown} onChange={onChange} value={body}></textarea>
+        <textarea
+          name="body"
+          id="post_body"
+          className="shadow rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          autoFocus={true}
+          onKeyUp={onKeyUp}
+          onKeyDown={onKeyDown}
+          onChange={onChange}
+          value={body}
+        ></textarea>
       </div>
 
-      <input type="submit" value="post" className="hidden cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" />
+      <input
+        type="submit"
+        value="post"
+        className="hidden cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      />
     </form>
   );
 }
@@ -143,7 +108,4 @@ export function Posts() {
   );
 }
 
-export {
-  fetchPosts,
-  PostsContext,
-};
+export { PostsContext };

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState} from "react";
+import { createContext, useEffect, useState } from "react";
 
 const SocketContext = createContext(null);
 
@@ -16,7 +16,9 @@ export function useWebsocket(webSocketURL: string, eventHandlers: Object): WebSo
   }, []);
 
   useEffect(() => {
-    if (!socket) return;
+    if (!socket) {
+      return;
+    }
 
     socket.onmessage = (e: MessageEvent) => {
       const message = JSON.parse(e.data);

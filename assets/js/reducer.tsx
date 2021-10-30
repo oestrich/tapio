@@ -1,10 +1,11 @@
 import * as React from "react";
-import {  useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 
-import { fetchPosts, Post, PostsContext }  from "./posts";
+import { fetchPosts, Post } from "./api";
+import { PostsContext } from "./posts";
 import { useWebsocket, SocketContext } from "./websocket";
 
-export interface SocketReducer {
+export interface SocketReducerProps {
   webSocketURL: string;
 }
 
@@ -21,14 +22,14 @@ interface Action {
   data: any;
 }
 
-const initialState = {posts: []};
+const initialState = { posts: [] };
 
 const setPosts = (state: State, posts: Post[]) => {
-  return {...state, posts};
+  return { ...state, posts };
 };
 
 const addPost = (state: State, post: Post) => {
-  return {...state, posts: [post, ...state.posts]};
+  return { ...state, posts: [post, ...state.posts] };
 };
 
 const incrementLike = (state: State, like: Like) => {
@@ -39,7 +40,7 @@ const incrementLike = (state: State, like: Like) => {
     return post;
   });
 
-  return {...state, posts};
+  return { ...state, posts };
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -56,16 +57,15 @@ const reducer = (state: State, action: Action): State => {
     default:
       return state;
   }
-}
+};
 
-export function SocketReducer({ webSocketURL, children }: React.PropsWithChildren<SocketReducer>) {
+export function SocketReducer({ webSocketURL, children }: React.PropsWithChildren<SocketReducerProps>) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    fetchPosts()
-      .then((posts) => {
-        dispatch({ type: "posts", data: posts });
-      });
+    fetchPosts().then((posts) => {
+      dispatch({ type: "posts", data: posts });
+    });
   }, []);
 
   const newPost = (post: Post) => {
@@ -83,9 +83,7 @@ export function SocketReducer({ webSocketURL, children }: React.PropsWithChildre
 
   return (
     <SocketContext.Provider value={socket}>
-      <PostsContext.Provider value={state.posts}>
-        {children}
-      </PostsContext.Provider>
+      <PostsContext.Provider value={state.posts}>{children}</PostsContext.Provider>
     </SocketContext.Provider>
   );
 }

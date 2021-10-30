@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { CreatePost, Posts }  from "./posts";
+import { CreatePost, Posts } from "./posts";
 import { SocketReducer } from "./reducer";
 
 document.addEventListener("click", (e) => {
@@ -26,11 +26,11 @@ document.addEventListener("click", (e) => {
   }
 });
 
-interface App {
+interface AppProps {
   webSocketURL: string;
 }
 
-function App(props: App) {
+function App(props: AppProps) {
   return (
     <SocketReducer webSocketURL={props.webSocketURL}>
       <CreatePost />
@@ -40,7 +40,7 @@ function App(props: App) {
 }
 
 const components = {
-  App
+  App,
 };
 
 /**

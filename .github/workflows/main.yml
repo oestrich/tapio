@@ -79,3 +79,4 @@ jobs:
     - name: Verify application
       run: |
         yarn tsc
+        yarn lint:ci
