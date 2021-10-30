@@ -6,6 +6,10 @@ export interface Post {
   likes_count: number;
 }
 
+export interface Like {
+  post_id: number;
+}
+
 const fetchPosts = async (): Promise<Post[]> => {
   let posts = await fetch("/posts", {
     headers: {

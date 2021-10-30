@@ -1,8 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { CreatePost, Posts } from "./posts";
-import { SocketReducer } from "./reducer";
+import { CreatePost } from "./components/CreatePost";
+import { Posts } from "./components/Posts";
+import { SocketReducer } from "./components/SocketReducer";
 
 document.addEventListener("click", (e) => {
   let target = e.target as HTMLAnchorElement;

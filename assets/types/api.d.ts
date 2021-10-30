@@ -8,4 +8,4 @@ export interface Post {
 declare const fetchPosts: () => Promise<Post[]>;
 declare const createPost: (body: string) => void;
 declare const createLike: (post: Post) => void;
-export { createLike, createPost, fetchPosts, };
+export { createLike, createPost, fetchPosts };
