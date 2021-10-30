@@ -1,14 +1,33 @@
 import * as React from "react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 import { createLike, Post as ApiPost } from "../api";
 
+function LikedStatus({ status }) {
+  switch (status) {
+    case "liked":
+      return <span>Liked</span>;
+    case "failed":
+      return <span>Failed to like</span>;
+  }
+
+  return null;
+}
+
 export function Post(post: ApiPost) {
+  const [likedStatus, setLikedStatus] = useState(null);
+
   const onLikeClick = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault();
 
-      createLike(post);
+      createLike(post).then((success) => {
+        if (success) {
+          setLikedStatus("liked");
+        } else {
+          setLikedStatus("failed");
+        }
+      });
     },
     [post],
   );
@@ -24,7 +43,8 @@ export function Post(post: ApiPost) {
         <div>
           <span className="like-count" title="Number of likes">
             {post.likes_count}
-          </span>{" "}
+          </span>
+          <LikedStatus status={likedStatus} />
           <a href="#" onClick={onLikeClick} className="like pl-3 text-sm">
             Like
           </a>

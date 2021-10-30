@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export interface Post {
   id: number;
   body: string;
@@ -11,13 +13,15 @@ export interface Like {
 }
 
 const fetchPosts = async (): Promise<Post[]> => {
-  let posts = await fetch("/posts", {
+  let posts = await axios({
+    method: "GET",
+    url: "/posts",
     headers: {
       "Content-Type": "application/json",
     },
   })
     .then((response) => {
-      return response.json();
+      return response.data;
     })
     .then((collection) => {
       return collection["items"];
@@ -26,38 +30,43 @@ const fetchPosts = async (): Promise<Post[]> => {
   return posts;
 };
 
-const createPost = (body: string) => {
-  fetch("/posts", {
+const createPost = async (body: string): Promise<boolean> => {
+  return await axios({
+    url: "/posts",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-    body: JSON.stringify({ body }),
-  });
+    data: JSON.stringify({ body }),
+  })
+    .then(() => true)
+    .catch(() => false);
 };
 
-const createLike = (post: Post) => {
+const createLike = async (post: Post): Promise<boolean> => {
   const href = `/posts/${post.id}/like`;
 
-  fetch(href, {
+  return await axios({
+    url: href,
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-    body: "{}",
-  }).then((response) => {
-    if (!response.ok) {
-      let alert = document.querySelector(".alert-error");
-      alert.innerHTML = "You've already liked this!";
-      alert.classList.remove("hidden");
+    data: "{}",
+  })
+    .then((response) => response.status == 201)
+    .catch(() => false);
+  // .catch((response) => {
+  //   let alert = document.querySelector(".alert-error");
+  //   alert.innerHTML = "You've already liked this!";
+  //   alert.classList.remove("hidden");
 
-      setTimeout(() => {
-        alert.classList.add("hidden");
-      }, 4000);
-    }
-  });
+  //   setTimeout(() => {
+  //     alert.classList.add("hidden");
+  //   }, 4000);
+  // });
 };
 
 export { createLike, createPost, fetchPosts };
