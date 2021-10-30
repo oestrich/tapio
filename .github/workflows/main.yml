@@ -78,5 +78,4 @@ jobs:
         yarn install
     - name: Verify application
       run: |
-        yarn lint:ci
-        yarn jest
+        yarn tsc
