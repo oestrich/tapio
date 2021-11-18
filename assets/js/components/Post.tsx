@@ -6,9 +6,9 @@ import { createLike, Post as ApiPost } from "../api";
 function LikedStatus({ status }) {
   switch (status) {
     case "liked":
-      return <span>Liked</span>;
+      return <span className="text-green-600">Liked</span>;
     case "failed":
-      return <span>Failed to like</span>;
+      return <span className="text-red-600">You already liked this!</span>;
   }
 
   return null;

@@ -8,6 +8,7 @@ module.exports = {
   mode,
   purge: [
     '../lib/tapio/web/templates/**/*.html.eex',
+    './js/**/*.tsx',
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {

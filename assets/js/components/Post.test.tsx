@@ -31,5 +31,5 @@ test("already liked a post", async () => {
 
   fireEvent.click(screen.getByText("Like"));
 
-  await waitFor(() => screen.findByText("Failed to like"));
+  await waitFor(() => screen.findByText("You already liked this!"));
 });
