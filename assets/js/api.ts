@@ -58,15 +58,6 @@ const createLike = async (post: Post): Promise<boolean> => {
   })
     .then((response) => response.status == 201)
     .catch(() => false);
-  // .catch((response) => {
-  //   let alert = document.querySelector(".alert-error");
-  //   alert.innerHTML = "You've already liked this!";
-  //   alert.classList.remove("hidden");
-
-  //   setTimeout(() => {
-  //     alert.classList.add("hidden");
-  //   }, 4000);
-  // });
 };
 
 export { createLike, createPost, fetchPosts };

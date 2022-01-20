@@ -1,6 +1,5 @@
 <div class="mx-auto relative">
   <div class="alert-error hidden absolute w-full bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-    Problemo
   </div>
 
   <div data-react-class='App' data-react-props='{"webSocketURL":"ws://<%= @host %>:<%= @port %>/socket"}'></>

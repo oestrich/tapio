@@ -23,7 +23,7 @@ defmodule Tapio.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:aino, github: "oestrich/aino"},
+      {:aino, "~> 0.2.0"},
       {:bcrypt_elixir, "~> 2.0"},
       {:ecto_sql, "~> 3.7"},
       {:phoenix_pubsub, "~> 2.0"},

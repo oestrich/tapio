@@ -10,6 +10,8 @@ defmodule Tapio.Web.Handler do
     get("/sign-in", &Tapio.Web.Session.show/1, as: :sign_in),
     post("/sign-in", &Tapio.Web.Session.create/1),
     delete("/sign-out", &Tapio.Web.Session.delete/1, as: :sign_out),
+    get("/register", &Tapio.Web.Registration.new/1, as: :register),
+    post("/register", &Tapio.Web.Registration.create/1),
     get("/posts", &Tapio.Web.Posts.index/1, as: :posts),
     post("/posts", &Tapio.Web.Posts.create/1),
     post("/posts/:id/like", &Tapio.Web.Likes.create/1, as: :post_like)

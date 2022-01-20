@@ -17,10 +17,28 @@ defmodule Tapio.Application do
        port: config.port,
        host: config.host,
        otp_app: :tapio,
-       environment: config.environment}
+       environment: config.environment},
+      {Aino.Watcher, name: Tapio.Watcher, watchers: watchers(config.environment)}
     ]
 
     opts = [strategy: :one_for_one, name: Tapio.Supervisor]
     Supervisor.start_link(children, opts)
   end
+
+  def watchers("development") do
+    [
+      [
+        command: "node_modules/yarn/bin/yarn",
+        args: ["build:js:watch"],
+        directory: "assets/"
+      ],
+      [
+        command: "node_modules/yarn/bin/yarn",
+        args: ["build:css:watch"],
+        directory: "assets/"
+      ]
+    ]
+  end
+
+  def watchers(_), do: []
 end
