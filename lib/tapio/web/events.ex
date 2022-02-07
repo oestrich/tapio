@@ -57,13 +57,14 @@ defmodule Tapio.Web.Events.Handler do
 
     response = %Aino.Event{
       event: "posts/new",
-      data: Jason.encode!(%{
-        id: post.id,
-        body: post.body,
-        username: post.user.username,
-        likes_count: post.likes_count,
-        inserted_at: Tapio.Web.Page.View.posted_at(post.inserted_at, user.timezone)
-      })
+      data:
+        Jason.encode!(%{
+          id: post.id,
+          body: post.body,
+          username: post.user.username,
+          likes_count: post.likes_count,
+          inserted_at: Tapio.Web.Page.View.posted_at(post.inserted_at, user.timezone)
+        })
     }
 
     {:ok, response, token}
