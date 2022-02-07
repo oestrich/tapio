@@ -25,20 +25,5 @@ defmodule Tapio.Application do
     Supervisor.start_link(children, opts)
   end
 
-  def watchers("development") do
-    [
-      [
-        command: "node_modules/yarn/bin/yarn",
-        args: ["build:js:watch"],
-        directory: "assets/"
-      ],
-      [
-        command: "node_modules/yarn/bin/yarn",
-        args: ["build:css:watch"],
-        directory: "assets/"
-      ]
-    ]
-  end
-
   def watchers(_), do: []
 end

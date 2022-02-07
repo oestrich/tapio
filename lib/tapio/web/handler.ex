@@ -14,7 +14,8 @@ defmodule Tapio.Web.Handler do
     post("/register", &Tapio.Web.Registration.create/1),
     get("/posts", &Tapio.Web.Posts.index/1, as: :posts),
     post("/posts", &Tapio.Web.Posts.create/1),
-    post("/posts/:id/like", &Tapio.Web.Likes.create/1, as: :post_like)
+    post("/posts/:id/like", &Tapio.Web.Likes.create/1, as: :post_like),
+    get("/events", &Tapio.Web.Events.index/1, as: :events)
   ])
 
   @impl true
@@ -22,7 +23,7 @@ defmodule Tapio.Web.Handler do
     middleware = [
       Aino.Middleware.common(),
       &Aino.Middleware.assets/1,
-      &Aino.Middleware.Development.recompile/1,
+      # &Aino.Middleware.Development.recompile/1,
       &Aino.Session.config(&1, %Aino.Session.Cookie{key: "key", salt: "salt"}),
       &Aino.Session.decode/1,
       &Tapio.Web.Session.Fetch.call/1,
@@ -36,84 +37,5 @@ defmodule Tapio.Web.Handler do
     ]
 
     Aino.Token.reduce(token, middleware)
-  end
-
-  @impl true
-  def sockets() do
-    [{"/socket", Tapio.Web.Socket}]
-  end
-end
-
-defmodule Tapio.Web.Socket do
-  @behaviour Aino.WebSocket.Handler
-
-  @impl true
-  def init(state) do
-    Phoenix.PubSub.subscribe(Tapio.PubSub, "posts")
-
-    middleware = [
-      &Aino.Middleware.headers/1,
-      &Aino.Middleware.cookies/1,
-      &Aino.Session.config(&1, %Aino.Session.Cookie{key: "key", salt: "salt"}),
-      &Aino.Session.decode/1,
-      &Tapio.Web.Session.Fetch.call/1
-    ]
-
-    state = Aino.Token.reduce(state, middleware)
-
-    case Map.has_key?(state, :current_user) do
-      true ->
-        state = Map.put(state, :session, %{current_user: state.current_user})
-        {:ok, state}
-
-      false ->
-        :shutdown
-    end
-  end
-
-  @impl true
-  def handle(token, _message) do
-    token
-  end
-
-  @impl true
-  def info(token, %Tapio.Event{event: event, data: data}) do
-    case event do
-      "likes/new" ->
-        new_like(token, data)
-
-      "posts/new" ->
-        new_post(token, data)
-    end
-  end
-
-  def info(token, _event) do
-    token
-  end
-
-  defp new_like(token, like) do
-    response = %Aino.WebSocket.Event{
-      event: "likes/new",
-      data: Map.take(like, [:post_id])
-    }
-
-    Map.put(token, :response, response)
-  end
-
-  defp new_post(token, post) do
-    %{current_user: user} = token.session
-
-    response = %Aino.WebSocket.Event{
-      event: "posts/new",
-      data: %{
-        id: post.id,
-        body: post.body,
-        username: post.user.username,
-        likes_count: post.likes_count,
-        inserted_at: Tapio.Web.Page.View.posted_at(post.inserted_at, user.timezone)
-      }
-    }
-
-    Map.put(token, :response, response)
   end
 end

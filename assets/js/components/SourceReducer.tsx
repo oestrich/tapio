@@ -3,14 +3,14 @@ import { useEffect, useReducer } from "react";
 
 import { fetchPosts, Like, Post } from "../api";
 import { initialState, reducer } from "../reducer";
-import { useWebsocket, SocketContext } from "../websocket";
+import { useEventSource, SourceContext } from "../eventsource";
 import { PostsContext } from "./Posts";
 
-export interface SocketReducerProps {
-  webSocketURL: string;
+export interface SourceReducerProps {
+  eventSourceURL: string;
 }
 
-export function SocketReducer({ webSocketURL, children }: React.PropsWithChildren<SocketReducerProps>) {
+export function SourceReducer({ eventSourceURL, children }: React.PropsWithChildren<SourceReducerProps>) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -27,14 +27,14 @@ export function SocketReducer({ webSocketURL, children }: React.PropsWithChildre
     dispatch({ type: "likes/new", data: like });
   };
 
-  const socket = useWebsocket(webSocketURL, {
+  const source = useEventSource(eventSourceURL, {
     "posts/new": newPost,
     "likes/new": newLike,
   });
 
   return (
-    <SocketContext.Provider value={socket}>
+    <SourceContext.Provider value={source}>
       <PostsContext.Provider value={state.posts}>{children}</PostsContext.Provider>
-    </SocketContext.Provider>
+    </SourceContext.Provider>
   );
 }

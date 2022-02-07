@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 
 import { CreatePost } from "./components/CreatePost";
 import { Posts } from "./components/Posts";
-import { SocketReducer } from "./components/SocketReducer";
+import { SourceReducer } from "./components/SourceReducer";
 
 document.addEventListener("click", (e) => {
   let target = e.target as HTMLAnchorElement;
@@ -28,15 +28,15 @@ document.addEventListener("click", (e) => {
 });
 
 interface AppProps {
-  webSocketURL: string;
+  eventSourceURL: string;
 }
 
 function App(props: AppProps) {
   return (
-    <SocketReducer webSocketURL={props.webSocketURL}>
+    <SourceReducer eventSourceURL={props.eventSourceURL}>
       <CreatePost />
       <Posts />
-    </SocketReducer>
+    </SourceReducer>
   );
 }
 
