@@ -40,6 +40,9 @@ defmodule Tapio.Web.Events.Handler do
 
       "posts/new" ->
         new_post(token, data)
+
+      "system/reload" ->
+        reload_system(token)
     end
   end
 
@@ -65,6 +68,15 @@ defmodule Tapio.Web.Events.Handler do
           likes_count: post.likes_count,
           inserted_at: Tapio.Web.Page.View.posted_at(post.inserted_at, user.timezone)
         })
+    }
+
+    {:ok, response, token}
+  end
+
+  defp reload_system(token) do
+    response = %Aino.Event{
+      event: "system/reload",
+      data: "{}"
     }
 
     {:ok, response, token}

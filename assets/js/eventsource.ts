@@ -10,10 +10,6 @@ export function useEventSource(eventSourceURL: string, eventHandlers: Object): E
 
     setSource(source);
 
-    if (!source) {
-      return;
-    }
-
     for (let [key, handler] of Object.entries(eventHandlers)) {
       source.addEventListener(key, (e: MessageEvent) => {
         const message = JSON.parse(e.data);

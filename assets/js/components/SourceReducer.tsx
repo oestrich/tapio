@@ -19,6 +19,10 @@ export function SourceReducer({ eventSourceURL, children }: React.PropsWithChild
     });
   }, []);
 
+  const reload = () => {
+    window.location.reload();
+  };
+
   const newPost = (post: Post) => {
     dispatch({ type: "posts/new", data: post });
   };
@@ -30,6 +34,7 @@ export function SourceReducer({ eventSourceURL, children }: React.PropsWithChild
   const source = useEventSource(eventSourceURL, {
     "posts/new": newPost,
     "likes/new": newLike,
+    "system/reload": reload,
   });
 
   return (
