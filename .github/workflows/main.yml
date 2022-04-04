@@ -3,6 +3,8 @@ on: push
 jobs:
   elixir:
     runs-on: ubuntu-20.04
+    env:
+      SHELL: bash
     services:
       postgres:
         image: postgres

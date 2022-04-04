@@ -18,4 +18,20 @@ defmodule Tapio.Config do
       }
     ]
   end
+
+  def database() do
+    Vapor.load!(database_providers())
+  end
+
+  defp database_providers() do
+    [
+      %Dotenv{},
+      %Env{
+        bindings: [
+          {:database_url, "DATABASE_URL"},
+          {:pool_size, "POOL_SIZE", map: &String.to_integer/1}
+        ]
+      }
+    ]
+  end
 end
