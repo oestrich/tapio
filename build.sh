@@ -14,3 +14,6 @@ MIX_ENV=prod mix compile
 
 # Build the release and overwrite the existing release directory
 MIX_ENV=prod mix release --overwrite
+
+# Migrate the new app
+_build/prod/rel/tapio/bin/tapio eval 'Tapio.ReleaseTasks.Migrate.run()'
