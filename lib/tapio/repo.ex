@@ -10,8 +10,9 @@ defmodule Tapio.Repo do
 
     config =
       Keyword.merge(config,
-        url: vapor_config.database_url,
-        pool_size: vapor_config.pool_size
+        ssl: vapor_config.ssl,
+        pool_size: vapor_config.pool_size,
+        url: vapor_config.url
       )
 
     {:ok, config}

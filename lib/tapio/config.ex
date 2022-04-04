@@ -28,10 +28,15 @@ defmodule Tapio.Config do
       %Dotenv{},
       %Env{
         bindings: [
-          {:database_url, "DATABASE_URL"},
-          {:pool_size, "POOL_SIZE", map: &String.to_integer/1}
+          {:ssl, "DATABASE_SSL", map: &to_boolean/1},
+          {:pool_size, "POOL_SIZE", map: &String.to_integer/1},
+          {:url, "DATABASE_URL"}
         ]
       }
     ]
   end
+
+  defp to_boolean("true"), do: true
+
+  defp to_boolean(_), do: false
 end

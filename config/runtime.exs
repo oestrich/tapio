@@ -1,3 +1,3 @@
 import Config
 
-config :tapio, Tapio.Repo, ssl: true
+config :tapio, Tapio.Repo, ssl_opts: [log_level: :error]
