@@ -5,6 +5,7 @@ defmodule Tapio.Web.Events do
     token
     |> Token.response_status(200)
     |> Token.response_header("Content-Type", "text/event-stream")
+    |> Token.response_header("Cache-Control", "no-cache")
     |> Map.put(:chunk, true)
     |> Map.put(:handler, Tapio.Web.Events.Handler)
   end

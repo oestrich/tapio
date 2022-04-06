@@ -1,40 +1,21 @@
 defmodule Tapio.Config do
-  alias Vapor.Provider.Dotenv
-  alias Vapor.Provider.Env
+  use Vapor.Planner
 
-  def application() do
-    Vapor.load!(application_providers())
-  end
+  dotenv()
 
-  defp application_providers() do
-    [
-      %Dotenv{},
-      %Env{
-        bindings: [
-          {:environment, "DEPLOY_ENV"},
-          {:port, "PORT", map: &String.to_integer/1},
-          {:host, "HOST"}
-        ]
-      }
-    ]
-  end
+  config :application,
+         env([
+           {:environment, "DEPLOY_ENV", default: "development"},
+           {:port, "PORT", default: 4000, map: &String.to_integer/1},
+           {:host, "HOST", default: "localhost"}
+         ])
 
-  def database() do
-    Vapor.load!(database_providers())
-  end
-
-  defp database_providers() do
-    [
-      %Dotenv{},
-      %Env{
-        bindings: [
-          {:ssl, "DATABASE_SSL", map: &to_boolean/1},
-          {:pool_size, "POOL_SIZE", map: &String.to_integer/1},
-          {:url, "DATABASE_URL"}
-        ]
-      }
-    ]
-  end
+  config :database,
+         env([
+           {:ssl, "DATABASE_SSL", map: &to_boolean/1},
+           {:url, "DATABASE_URL"},
+           {:pool_size, "POOL_SIZE", default: 5, map: &String.to_integer/1}
+         ])
 
   defp to_boolean("true"), do: true
 
