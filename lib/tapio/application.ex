@@ -38,8 +38,7 @@ defmodule Tapio.Application do
   end
 
   def watchers("development") do
-    [
-    ]
+    []
   end
 
   def watchers(_), do: []
