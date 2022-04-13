@@ -1,7 +1,7 @@
 <div class="w-full max-w-sm mx-auto">
   <h2 class="text-4xl my-4">Sign In</h2>
 
-  <form action="<%= Routes.sign_in_path(token) %>" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+  <form action="<%= Routes.sign_in_path(@token) %>" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
         Username
@@ -18,6 +18,6 @@
 
     <input type="submit" value="Sign In" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"/>
 
-    <a href="<%= Routes.register_path(token) %>">Register</a>
+    <a href="<%= Routes.register_path(@token) %>">Register</a>
   </form>
 </div>

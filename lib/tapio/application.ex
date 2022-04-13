@@ -25,7 +25,7 @@ defmodule Tapio.Application do
         [
           {Aino,
            callback: Tapio.Web.Handler,
-           otp_app: :example,
+           otp_app: :tapio,
            port: config.port,
            host: config.host,
            environment: config.environment},
@@ -39,16 +39,6 @@ defmodule Tapio.Application do
 
   def watchers("development") do
     [
-      [
-        command: "node_modules/yarn/bin/yarn",
-        args: ["build:js:watch"],
-        directory: "assets/"
-      ],
-      [
-        command: "node_modules/yarn/bin/yarn",
-        args: ["build:css:watch"],
-        directory: "assets/"
-      ]
     ]
   end
 

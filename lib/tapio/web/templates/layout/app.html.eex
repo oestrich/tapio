@@ -14,22 +14,22 @@
     <nav class="bg-gray-800 p-2 mt-0 w-full absolute">
       <div class="max-w-4xl mx-auto flex flex-wrap items-center">
         <div class="flex w-full md:w-1/2 justify-center md:justify-start text-white font-extrabold">
-          <a href="<%= Routes.root_url(token) %>" class="text-white no-underline hover:text-white hover:no-underline">
+          <a href="<%= Routes.root_url(@token) %>" class="text-white no-underline hover:text-white hover:no-underline">
             <span class="text-2xl pl-2">Tapio</span>
           </a>
         </div>
 
         <div class="flex w-full content-center justify-between md:w-1/2 md:justify-end">
           <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
-            <%= if Map.has_key?(assigns, :current_user) do %>
+            <%= if Map.has_key?(@token, :current_user) do %>
               <li>
-                <a href="<%= Routes.sign_out_path(token) %>" class="inline-block text-white no-underline py-2 px-2 hover:text-gray-200" data-method="delete">
+                <a href="<%= Routes.sign_out_path(@token) %>" class="inline-block text-white no-underline py-2 px-2 hover:text-gray-200" data-method="delete">
                   Sign Out
                 </a>
               </li>
             <% else %>
               <li>
-                <a href="<%= Routes.sign_in_path(token) %>" class="inline-block text-white no-underline py-2 px-2 hover:text-gray-200">
+                <a href="<%= Routes.sign_in_path(@token) %>" class="inline-block text-white no-underline py-2 px-2 hover:text-gray-200">
                   Sign In
                 </a>
               </li>
