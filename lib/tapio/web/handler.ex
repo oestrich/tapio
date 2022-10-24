@@ -42,7 +42,6 @@ defmodule Tapio.Web.Handler do
   end
 end
 
-
 defmodule Tapio.Web.Handler.Routes do
   @moduledoc false
 

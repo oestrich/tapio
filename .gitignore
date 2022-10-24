@@ -28,3 +28,6 @@ tapio-*.tar
 .env.dev
 assets/node_modules/
 priv/static/
+
+.nix-mix
+.nix-hex
