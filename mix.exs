@@ -27,7 +27,7 @@ defmodule Tapio.MixProject do
       {:bcrypt_elixir, "~> 2.0"},
       {:ecto_sql, "~> 3.7"},
       {:phoenix_pubsub, "~> 2.0"},
-      {:postgrex, "~> 0.15.11"},
+      {:postgrex, "~> 0.16"},
       {:timex, "~> 3.7"},
       {:vapor, "~> 0.10.0"}
     ]

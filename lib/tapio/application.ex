@@ -22,24 +22,23 @@ defmodule Tapio.Application do
   defp aino(config) do
     case config.environment != "test" do
       true ->
-        [
-          {Aino,
-           callback: Tapio.Web.Handler,
-           otp_app: :tapio,
-           port: config.port,
-           host: config.host,
-           environment: config.environment},
-          {Aino.Watcher, name: Tapio.Watcher, watchers: watchers(config.environment)}
-        ]
+        aino_config = %Aino.Config{
+          callback: Tapio.Web.Handler,
+          otp_app: :tapio,
+          port: config.port,
+          host: config.host,
+          url_port: config.url_port,
+          url_scheme: config.url_scheme,
+          environment: config.environment,
+          config: %{
+            session_salt: config.session_salt
+          }
+        }
+
+        [{Aino, aino_config}]
 
       false ->
         []
     end
   end
-
-  def watchers("development") do
-    []
-  end
-
-  def watchers(_), do: []
 end
